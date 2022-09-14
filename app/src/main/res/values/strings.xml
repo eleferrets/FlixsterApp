@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Flixster</string>
+    <string name="textview">TextView</string>
+    <string name="overview">TextView</string>
+    <string name="movie_image">Movie Image</string>
+    <string name="title">TextView</string>
+    <string name="overview_landscape">TextView</string>
+    <string name="movie_backdrop">Movie Backdrop</string>
 </resources>

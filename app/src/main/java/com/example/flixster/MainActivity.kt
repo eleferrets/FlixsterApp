@@ -17,8 +17,7 @@ private const val NOW_PLAYING_URL =
 class MainActivity : AppCompatActivity() {
 
     private val movies = mutableListOf<Movie>()
-    private lateinit var rvMovies : RecyclerView
-
+    private lateinit var rvMovies: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,9 +26,10 @@ class MainActivity : AppCompatActivity() {
         rvMovies = findViewById(R.id.rvMovies)
         // Takes context and list of movies
         val movieAdapter = MovieAdapter(this, movies)
-rvMovies.adapter = movieAdapter
+        rvMovies.adapter = movieAdapter
         // Places movies from top to bottom
-        rvMovies.layoutManager=LinearLayoutManager(this)
+        rvMovies.layoutManager = LinearLayoutManager(this)
+
         val client = AsyncHttpClient()
         client.get(NOW_PLAYING_URL, object : JsonHttpResponseHandler() {
             override fun onFailure(
