@@ -3,15 +3,20 @@ package com.example.flixster
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.Bitmap
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
+import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+
 
 private const val TAG = "MovieAdapter"
 const val MOVIE_EXTRA = "MOVIE_EXTRA"
@@ -56,7 +61,7 @@ class MovieAdapter(private val context: Context, private val movies: List<Movie>
             }
             tvTitle.text = movie.title
             tvOverview.text = movie.overview
-            Glide.with(context).load(image).placeholder(R.drawable.default_image).into(ivPoster)
+            Glide.with(context).load(image).transform(CircleCrop()).placeholder(R.drawable.default_image).into(ivPoster)
         }
 
         override fun onClick(v: View?) {

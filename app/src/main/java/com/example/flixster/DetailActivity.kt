@@ -2,6 +2,7 @@ package com.example.flixster
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings.Global.getString
 import android.util.Log
 import android.widget.RatingBar
 import android.widget.TextView
@@ -13,7 +14,7 @@ import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerView
 import okhttp3.Headers
 
-private const val YOUTUBE_API_KEY = "AIzaSyCNIgY3lJctW40wyJajvU3QTYM6xdjW5DY"
+private const val YOUTUBE_API_KEY = R.string.youtube_api_key.toString()
 private const val TRAILERS_URL = "https://api.themoviedb.org/3/movie/%d/videos?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed"
 private const val TAG = "DetailActivity"
 
@@ -22,6 +23,9 @@ class DetailActivity : YouTubeBaseActivity() {
     private lateinit var tvOverview: TextView
     private lateinit var ratingBar: RatingBar
     private lateinit var ytPlayerView: YouTubePlayerView
+    private lateinit var tvAdult: TextView
+    private lateinit var tvRelease: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
@@ -29,13 +33,16 @@ class DetailActivity : YouTubeBaseActivity() {
         tvOverview = findViewById(R.id.tvOverview)
         ratingBar = findViewById(R.id.rbVoteAverage)
         ytPlayerView = findViewById(R.id.player)
-
+        tvAdult= findViewById(R.id.tvAdult)
+        tvRelease= findViewById(R.id.tvRelease)
 
         val movie = intent.getParcelableExtra<Movie>(MOVIE_EXTRA) as Movie
         Log.i(TAG, "Movie is $movie")
         tvTitle.text = movie.title
         tvOverview.text = movie.overview
         ratingBar.rating = movie.voteAverage.toFloat()
+        tvAdult.text = "Adult Content: "+movie.adult.toString()
+        tvRelease.text = "Released: "+movie.releaseDate
 
         val client = AsyncHttpClient()
         client.get(TRAILERS_URL.format(movie.movieId), object : JsonHttpResponseHandler() {
@@ -71,7 +78,12 @@ class DetailActivity : YouTubeBaseActivity() {
                 p2: Boolean
             ) {
                 Log.i(TAG, "onInitSuccess")
-                player?.cueVideo(youtubeKey)
+                if (ratingBar.rating > 5) {
+                    player?.loadVideo(youtubeKey)
+                }
+                else {
+                    player?.cueVideo(youtubeKey)
+                }
             }
 
             override fun onInitializationFailure(
